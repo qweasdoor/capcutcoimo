@@ -17,27 +17,28 @@ export const CONFIG = {
   },
 
 // CapCut Website Configuration
-  CAPCUT: {
-    SIGNUP_URL: 'https://www.capcut.com/id-id/signup',
-    SELECTORS: {
-      // Gambar 1: Halaman Awal
-      EMAIL_INPUT: 'input[placeholder*="alamat email"]', 
-      CONTINUE_BUTTON: 'button.lv_sign_in_panel_wide-primary-button', // Tombol "Lanjutkan"
-      
-      // Gambar 2: Set Password
-      PASSWORD_INPUT: 'input[type="password"]',
-      SIGNUP_BUTTON: 'button.lv_sign_in_panel_wide-sign-in-button', // Tombol "Daftar"
-      
-      // Gambar 3: Birthday (Urutan: Tahun -> Bulan -> Hari)
-      BIRTHDAY_INPUT: 'input[placeholder="Tahun"]', 
-      BIRTHDAY_MONTH_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(1), [role="combobox"]:nth-of-type(1)', 
-      BIRTHDAY_DAY_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(2), [role="combobox"]:nth-of-type(2)',
-      BIRTHDAY_NEXT_BUTTON: 'button.lv_sign_in_panel_wide-birthday-next', // Tombol "Berikutnya"
-      
-      OTP_INPUT: 'input.lv-input',
-      DROPDOWN_ITEMS: 'li[role="option"], .lv-select-popup li'
-    }
-  },
+  // config.js
+CAPCUT: {
+  SIGNUP_URL: 'https://www.capcut.com/id-id/signup',
+  SELECTORS: {
+    // Gambar 1
+    EMAIL_INPUT: 'input[name="signUsername"]',
+    CONTINUE_BUTTON: '.lv_sign_in_panel_wide-primary-button', 
+    
+    // Gambar 2 - Perbaikan di sini
+    PASSWORD_INPUT: 'input[type="password"]',
+    SIGNUP_BUTTON: '.lv_sign_in_panel_wide-sign-in-button', // Menggunakan class tombol "Daftar"
+    
+    // Gambar 3
+    BIRTHDAY_INPUT: 'input[placeholder="Tahun"]',
+    BIRTHDAY_MONTH_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(1)',
+    BIRTHDAY_DAY_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(2)',
+    BIRTHDAY_NEXT_BUTTON: '.lv_sign_in_panel_wide-birthday-next',
+    
+    OTP_INPUT: 'input.lv-input',
+    DROPDOWN_ITEMS: '.lv-select-popup li'
+  }
+}
 
   // Browser Configuration
   BROWSER: {
@@ -92,3 +93,4 @@ export const CONFIG = {
   }
 
 };
+
