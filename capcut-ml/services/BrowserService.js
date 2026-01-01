@@ -69,40 +69,29 @@ export class BrowserService {
     });
   }
 
-  /**
-   * Click on element
-   * @param {Page} page - Puppeteer page instance
-   * @param {string} selector - CSS selector
-   * @returns {Promise<void>}
+ /**
+   * Perbaikan Click: Menangani selector class secara dinamis
    */
   static async clickElement(page, selector) {
     await page.waitForSelector(selector, { 
       visible: true, 
       timeout: CONFIG.TIMING.SELECTOR_TIMEOUT 
     });
-    await page.click(selector);
+    // Gunakan evaluate untuk klik yang lebih stabil pada elemen custom
+    await page.evaluate((sel) => {
+      document.querySelector(sel).click();
+    }, selector);
   }
 
   /**
-   * Select dropdown item by text
-   * @param {Page} page - Puppeteer page instance
-   * @param {string} itemText - Text of the item to select
-   * @returns {Promise<void>}
+   * Helper baru untuk klik berdasarkan teks (Sangat berguna untuk tombol 'Daftar')
    */
-  static async selectDropdownItem(page, itemText) {
-    await page.waitForSelector(CONFIG.CAPCUT.SELECTORS.DROPDOWN_ITEMS, { 
-      visible: true, 
-      timeout: CONFIG.TIMING.SELECTOR_TIMEOUT 
-    });
-    
-    await page.evaluate((text) => {
-      const items = document.querySelectorAll('.lv-select-popup li');
-      items.forEach(item => {
-        if (item.innerText.trim() === String(text)) {
-          item.click();
-        }
-      });
-    }, itemText);
+  static async clickByText(page, text) {
+    await page.evaluate((t) => {
+      const buttons = Array.from(document.querySelectorAll('button, div, span'));
+      const target = buttons.find(el => el.innerText.trim() === t);
+      if (target) target.click();
+    }, text);
   }
 
   /**
@@ -115,4 +104,5 @@ export class BrowserService {
       await browser.close();
     }
   }
+
 }
