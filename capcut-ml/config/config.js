@@ -19,26 +19,20 @@ export const CONFIG = {
 // CapCut Website Configuration
   // config.js
 CAPCUT: {
-    SIGNUP_URL: 'https://www.capcut.com/id-id/signup',
-    SELECTORS: {
-      // Gambar 1: Masukkan Email
-      EMAIL_INPUT: 'input[name="signUsername"]',
-      CONTINUE_BUTTON: '.lv_sign_in_panel_wide-primary-button', // Tombol "Lanjutkan"
-      
-      // Gambar 2: Masukkan Password (Titik kegagalan sebelumnya)
-      PASSWORD_INPUT: 'input[type="password"]',
-      SIGNUP_BUTTON: '.lv_sign_in_panel_wide-sign-in-button', // Tombol "Daftar" (Bukan type="submit")
-      
-      // Gambar 3: Birthday
-      BIRTHDAY_INPUT: 'input[placeholder="Tahun"]',
-      BIRTHDAY_MONTH_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(1)', 
-      BIRTHDAY_DAY_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(2)',
-      BIRTHDAY_NEXT_BUTTON: '.lv_sign_in_panel_wide-birthday-next',
-      
-      OTP_INPUT: 'input.lv-input',
-      DROPDOWN_ITEMS: 'li[role="option"], .lv-select-popup li'
-    }
-  },
+  SELECTORS: {
+    EMAIL_INPUT: 'input[name="signUsername"]',
+    CONTINUE_BUTTON: '.lv_sign_in_panel_wide-primary-button', // Tombol Lanjutkan
+    
+    PASSWORD_INPUT: 'input[type="password"]',
+    SIGNUP_BUTTON: '.lv_sign_in_panel_wide-sign-in-button', // PERBAIKAN: Gunakan class ini
+    
+    BIRTHDAY_INPUT: 'input[placeholder="Tahun"]',
+    BIRTHDAY_MONTH_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(1)', 
+    BIRTHDAY_DAY_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(2)',
+    BIRTHDAY_NEXT_BUTTON: '.lv_sign_in_panel_wide-birthday-next', // Tombol Berikutnya
+    // ...
+  }
+},
 
   // Browser Configuration
   BROWSER: {
@@ -67,23 +61,23 @@ CAPCUT: {
   // Birthday Configuration
   // PENTING: Nama bulan diubah kembali ke Bahasa Indonesia sesuai Gambar 3
   BIRTHDAY: {
-    MIN_YEAR: 1990,
-    MAX_YEAR: 2005,
-    MONTHS: [
-      { name: "Januari", days: 31 }, { name: "Februari", days: 28 }, { name: "Maret", days: 31 },
-      { name: "April", days: 30 }, { name: "Mei", days: 31 }, { name: "Juni", days: 30 },
-      { name: "Juli", days: 31 }, { name: "Agustus", days: 31 }, { name: "September", days: 30 },
-      { name: "Oktober", days: 31 }, { name: "November", days: 30 }, { name: "Desember", days: 31 }
-    ]
-  },
+  // Pastikan nama bulan Bahasa Indonesia agar cocok dengan UI di Gambar 3
+  MONTHS: [
+    { name: "Januari", days: 31 }, { name: "Februari", days: 28 }, { name: "Maret", days: 31 },
+    { name: "April", days: 30 }, { name: "Mei", days: 31 }, { name: "Juni", days: 30 },
+    { name: "Juli", days: 31 }, { name: "Agustus", days: 31 }, { name: "September", days: 30 },
+    { name: "Oktober", days: 31 }, { name: "November", days: 30 }, { name: "Desember", days: 31 }
+  ]
+}
 
   // File Configuration
   FILES: {
     PASSWORD_FILE: 'password.txt',
     ACCOUNTS_FILE: 'accounts.txt',
-    DEFAULT_PASSWORD: 'masuk123'
+    DEFAULT_PASSWORD: 'keep123'
   }
 
 };
+
 
 
