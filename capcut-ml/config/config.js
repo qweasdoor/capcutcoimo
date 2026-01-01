@@ -16,22 +16,26 @@ export const CONFIG = {
     }
   },
 
-  // CapCut Website Configuration
+// CapCut Website Configuration
   CAPCUT: {
     SIGNUP_URL: 'https://www.capcut.com/id-id/signup',
     SELECTORS: {
-      EMAIL_INPUT: 'input[name="signUsername"]',
+      // Gambar 1: Halaman Awal
+      EMAIL_INPUT: 'input[placeholder*="alamat email"]', 
+      CONTINUE_BUTTON: 'button.lv_sign_in_panel_wide-primary-button', // Tombol "Lanjutkan"
+      
+      // Gambar 2: Set Password
       PASSWORD_INPUT: 'input[type="password"]',
-      CONTINUE_BUTTON: 'button[type="submit"], .lv_sign_in_panel_wide-primary-button', 
-      SIGNUP_BUTTON: 'button[type="submit"]',
-      // Sesuai Gambar: Input Tahun adalah field pertama
-      BIRTHDAY_INPUT: 'input[placeholder="Year"]', 
-      // Sesuai Gambar: Month adalah dropdown kedua, Day adalah ketiga
-      BIRTHDAY_MONTH_SELECTOR: '.capcut-select:nth-of-type(2), [role="combobox"]:nth-of-type(2)',
-      BIRTHDAY_DAY_SELECTOR: '.capcut-select:nth-of-type(3), [role="combobox"]:nth-of-type(3)',
-      BIRTHDAY_NEXT_BUTTON: 'button.lv_sign_in_panel_wide-primary-button:not([disabled])',
+      SIGNUP_BUTTON: 'button.lv_sign_in_panel_wide-sign-in-button', // Tombol "Daftar"
+      
+      // Gambar 3: Birthday (Urutan: Tahun -> Bulan -> Hari)
+      BIRTHDAY_INPUT: 'input[placeholder="Tahun"]', 
+      BIRTHDAY_MONTH_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(1), [role="combobox"]:nth-of-type(1)', 
+      BIRTHDAY_DAY_SELECTOR: '.gate_birthday-picker-selector:nth-of-type(2), [role="combobox"]:nth-of-type(2)',
+      BIRTHDAY_NEXT_BUTTON: 'button.lv_sign_in_panel_wide-birthday-next', // Tombol "Berikutnya"
+      
       OTP_INPUT: 'input.lv-input',
-      DROPDOWN_ITEMS: 'li[role="option"], .capcut-select-option'
+      DROPDOWN_ITEMS: 'li[role="option"], .lv-select-popup li'
     }
   },
 
@@ -60,23 +64,23 @@ export const CONFIG = {
   },
 
   // Birthday Configuration
-  // PENTING: Ubah nama bulan ke Bahasa Inggris agar sesuai dengan UI di gambar
+  // PENTING: Nama bulan diubah kembali ke Bahasa Indonesia sesuai Gambar 3
   BIRTHDAY: {
     MIN_YEAR: 1990,
     MAX_YEAR: 2003,
     MONTHS: [
-      { name: "January", days: 31 },
-      { name: "February", days: 28 },
-      { name: "March", days: 31 },
+      { name: "Januari", days: 31 },
+      { name: "Februari", days: 28 },
+      { name: "Maret", days: 31 },
       { name: "April", days: 30 },
-      { name: "May", days: 31 },
-      { name: "June", days: 30 },
-      { name: "July", days: 31 },
-      { name: "August", days: 31 },
+      { name: "Mei", days: 31 },
+      { name: "Juni", days: 30 },
+      { name: "Juli", days: 31 },
+      { name: "Agustus", days: 31 },
       { name: "September", days: 30 },
-      { name: "October", days: 31 },
+      { name: "Oktober", days: 31 },
       { name: "November", days: 30 },
-      { name: "December", days: 31 }
+      { name: "Desember", days: 31 }
     ]
   },
 
@@ -86,4 +90,5 @@ export const CONFIG = {
     ACCOUNTS_FILE: 'accounts.txt',
     DEFAULT_PASSWORD: 'masuk123'
   }
+
 };
