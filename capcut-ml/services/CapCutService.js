@@ -1,127 +1,87 @@
 /**
- * CapCut Service for handling account creation workflow
+ * CapCutService.js - Robust version
  */
-
 import { CONFIG } from '../config/config.js';
 import { BrowserService } from './BrowserService.js';
-import { EmailService } from './EmailService.js';
-import { FileService } from './FileService.js';
-import { generateRandomBirthday, sleep, formatAccountData } from '../utils/helpers.js';
+import { sleep } from '../utils/helpers.js'; // Pastikan helpers diimport
 import chalk from 'chalk';
-import ora from 'ora';
 
 export class CapCutService {
-  /**
-   * Fill in email on signup page
-   */
+  
   static async fillEmail(page, email) {
-    const spinner = ora(chalk.blue('Mengisi email...')).start();
-    try {
-      const { EMAIL_INPUT, CONTINUE_BUTTON } = CONFIG.CAPCUT.SELECTORS;
-      await BrowserService.typeIntoField(page, EMAIL_INPUT, email);
-      await BrowserService.clickElement(page, CONTINUE_BUTTON);
-      spinner.succeed(chalk.green('Berhasil mengisi email!'));
-    } catch (error) {
-      spinner.fail(chalk.red('Gagal mengisi email!'));
-      throw error;
-    }
+    const { EMAIL_INPUT, CONTINUE_BUTTON } = CONFIG.CAPCUT.SELECTORS;
+    await page.waitForSelector(EMAIL_INPUT, { visible: true });
+    await BrowserService.typeIntoField(page, EMAIL_INPUT, email);
+    await page.click(CONTINUE_BUTTON);
+    console.log(chalk.green('✅ Berhasil mengisi email!'));
   }
-
+  
   /**
  * Fill in password on signup page
  */
 static async fillPassword(page, password) {
-  try {
-    const { PASSWORD_INPUT, SIGNUP_BUTTON } = CONFIG.CAPCUT.SELECTORS;
-    
-    // Tunggu input password muncul
-    await page.waitForSelector(PASSWORD_INPUT, { visible: true });
-    await BrowserService.typeIntoField(page, PASSWORD_INPUT, password);
-    
-    // Tunggu tombol "Daftar" (SIGNUP_BUTTON) muncul dan klik
-    await page.waitForSelector(SIGNUP_BUTTON, { visible: true });
-    await page.click(SIGNUP_BUTTON);
-    
-  } catch (error) {
-    console.error(chalk.red('Gagal mengisi password! Detail: ' + error.message));
-    throw error;
+    try {
+      const { PASSWORD_INPUT, SIGNUP_BUTTON } = CONFIG.CAPCUT.SELECTORS;
+      
+      // Tunggu transisi ke halaman Gambar 2
+      await page.waitForSelector(PASSWORD_INPUT, { visible: true, timeout: 15000 });
+      await BrowserService.typeIntoField(page, PASSWORD_INPUT, password);
+      
+      // Klik tombol "Daftar" berdasarkan class, bukan type="submit"
+      await page.waitForSelector(SIGNUP_BUTTON, { visible: true });
+      await page.click(SIGNUP_BUTTON);
+      console.log(chalk.green('✅ Berhasil mengisi password!'));
+    } catch (error) {
+      throw new Error(`Gagal di tahap Password: ${error.message}`);
+    }
   }
-}
   
   /**
    * Fill in birthday information (Optimized for UI provided)
    */
-  static async fillBirthday(page) {
-    const {
-      BIRTHDAY_INPUT,
-      BIRTHDAY_MONTH_SELECTOR,
-      BIRTHDAY_DAY_SELECTOR,
-      BIRTHDAY_NEXT_BUTTON
-    } = CONFIG.CAPCUT.SELECTORS;
-
+ static async fillBirthday(page) {
+    const { BIRTHDAY_INPUT, BIRTHDAY_MONTH_SELECTOR, BIRTHDAY_DAY_SELECTOR, BIRTHDAY_NEXT_BUTTON } = CONFIG.CAPCUT.SELECTORS;
+    const { generateRandomBirthday } = await import('../utils/helpers.js');
     const birthday = generateRandomBirthday();
-    const timeout = CONFIG.TIMING.SELECTOR_TIMEOUT;
 
     try {
-      // 1. ISI TAHUN (Input Field)
-      // Sesuai gambar, Year adalah input teks pertama
-      await page.waitForSelector(BIRTHDAY_INPUT, { timeout });
-      await page.click(BIRTHDAY_INPUT, { clickCount: 3 });
-      await page.keyboard.press('Backspace');
-      await page.type(BIRTHDAY_INPUT, String(birthday.year), { delay: 50 });
-      await page.keyboard.press('Enter');
+      // Tunggu halaman Gambar 3 muncul
+      await page.waitForSelector(BIRTHDAY_INPUT, { visible: true, timeout: 15000 });
+
+      // 1. Tahun
+      await page.type(BIRTHDAY_INPUT, String(birthday.year), { delay: 100 });
       await sleep(500);
 
-      // 2. ISI BULAN (Custom Dropdown)
-      // Sesuai gambar, Month adalah elemen kedua
-      if (BIRTHDAY_MONTH_SELECTOR) {
-        await page.click(BIRTHDAY_MONTH_SELECTOR);
-        await sleep(800); // Tunggu popup daftar bulan muncul
-        const monthSuccess = await this.clickItemByText(page, birthday.month);
-        if (!monthSuccess) throw new Error(`Bulan ${birthday.month} tidak ditemukan di daftar`);
-      }
+      // 2. Bulan
+      await page.click(BIRTHDAY_MONTH_SELECTOR);
+      await sleep(1000); // Tunggu dropdown muncul
+      await this.clickItemByText(page, birthday.month);
 
-      // 3. ISI HARI (Custom Dropdown)
-      // Sesuai gambar, Day adalah elemen ketiga
-      if (BIRTHDAY_DAY_SELECTOR) {
-        await page.click(BIRTHDAY_DAY_SELECTOR);
-        await sleep(800); // Tunggu popup daftar tanggal muncul
-        const daySuccess = await this.clickItemByText(page, birthday.day);
-        if (!daySuccess) throw new Error(`Tanggal ${birthday.day} tidak ditemukan di daftar`);
-      }
+      // 3. Hari
+      await page.click(BIRTHDAY_DAY_SELECTOR);
+      await sleep(1000);
+      await this.clickItemByText(page, birthday.day);
 
-      console.log(chalk.green(`📆 Tanggal lahir dipilih: ${birthday.day} ${birthday.month} ${birthday.year}`));
-
-      // 4. KLIK NEXT
-      // Tombol Next akan aktif setelah semua field terisi
+      // 4. Klik Berikutnya
       await page.waitForSelector(BIRTHDAY_NEXT_BUTTON, { visible: true });
       await page.click(BIRTHDAY_NEXT_BUTTON);
-
+      
       return birthday;
     } catch (error) {
-      console.error(chalk.red("Gagal mengisi tanggal lahir!"), error.message);
-      throw error;
+      throw new Error(`Gagal di tahap Birthday: ${error.message}`);
     }
   }
 
   /**
    * Helper: Mencari dan mengeklik item di dalam dropdown berdasarkan teks
    */
-  static async clickItemByText(page, text) {
-    const targetText = String(text).trim();
+ static async clickItemByText(page, text) {
     return await page.evaluate((t) => {
-      // Mencari di dalam elemen popup (li atau role option)
-      const items = Array.from(document.querySelectorAll('li, [role="option"], .capcut-select-option'));
-      const found = items.find(el => 
-        el.textContent.trim().toLowerCase() === t.toLowerCase() || 
-        el.innerText.trim().toLowerCase() === t.toLowerCase()
-      );
-      if (found) {
-        found.click();
-        return true;
-      }
+      const items = Array.from(document.querySelectorAll('li, [role="option"]'));
+      const found = items.find(el => el.textContent.trim() === t);
+      if (found) { found.click(); return true; }
       return false;
-    }, targetText);
+    }, String(text));
   }
 
   /**
@@ -180,3 +140,4 @@ static async fillPassword(page, password) {
   }
 
 }
+
